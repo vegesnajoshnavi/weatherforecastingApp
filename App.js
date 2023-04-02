@@ -190,3 +190,36 @@ function HideErrorMsg() {
 
     }, 5000);
 }
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        datasets: [{
+            label: 'Temperature (°C)',
+            data: [23, 22, 24, 25, 21, 20, 19],
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            fill: true
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+function updateChart(city) {
+    // make API request and get weather data for city
+    const weatherData = getWeatherData(city);
+
+    // update chart data and options
+    myChart.data.datasets[0].data = weatherData.temperature;
+    myChart.data.datasets[0].label = `Temperature (${weatherData.units})`;
+    myChart.data.labels = weatherData.daysOfWeek;
+    myChart.update();
+}
